@@ -50,8 +50,9 @@ if(isset($_GET["patvirtinti"])) {
 
 
     $klientai_tekstas = $_COOKIE["klientai"] . "|$id,$vardas,$pavarde,$asmens_kodas,$prisijungimo_data,$adresas,$elpastas";
-    echo $klientai_tekstas;
+    // echo $klientai_tekstas;
     setcookie("klientai", $klientai_tekstas, time() + 3600, "/");
+    header('Location: 3uzduotis.php'); //imituoja persikrovima, kad kodas atsimintu nauja reiksme
 }
 
 if(!isset($_COOKIE["klientai"])) {
@@ -64,7 +65,7 @@ if(!isset($_COOKIE["klientai"])) {
             "id" => $i+1,
             "vardas" => "vardas".($i+1), 
             "pavarde" => "pavarde".($i+1), 
-            "asmens_kodas" => rand(3,6).rand(0,99).rand(1,12).rand(1,31).rand(0,9999), //38512300000
+            "asmens_kodas" => rand(3,6).rand(0,99).rand(1,12).rand(1,31).rand(1000,9999), //38512300000
 
             //atsitiktiniu budu sugeneruota data
             "prisijungimo_data" => rand(1950, 2021)."-".rand(1,12)."-".rand(1,31), 
@@ -145,8 +146,13 @@ for($i = 0; $i < count($klientai) ; $i++) {
 $klientai_tekstas = implode("|",$klientai);
 
 // echo $klientai_tekstas;
+//Reikalingas tik tam , kad nustatytu musu pradines sugeneruotas reiksmes
+//sitas cookie tb paleidziamas tik viena vieninteli karta
+
+if(!isset($_COOKIE['klientai'])) {
 
 setcookie("klientai", $klientai_tekstas, time() + 3600, "/");
+}
 
 ?>
 
